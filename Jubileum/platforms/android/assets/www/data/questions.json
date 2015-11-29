@@ -1,0 +1,27 @@
+_jqjsp([
+			{
+				"img" : "quiz001.png",
+				"vraag" : "Hoe lang zijn jullie getrouwd?",
+				"antwoorden" : ["10 jaar", "39 jaar", "40 jaar", "we zijn niet getrouwd"],
+				"correctAntwoord" : 2	
+			},
+			{
+				"img" : "quiz002.png",
+				"vraag" : "vraag 2",
+				"antwoorden" : ["antwoord 1", "antwoord 2", "antwoord 3", "antwoord 4"],
+				"correctAntwoord" : 0
+			},
+			{
+				"img" : "quiz003.png",
+				"vraag" : "vraag 3",
+				"antwoorden" : ["antwoord 1", "antwoord 2", "antwoord 3", "antwoord 4"],
+				"correctAntwoord" : 0
+			},
+			{
+				"img" : "quizTarget.png",
+				"vraag" : "Laatste vraag",
+				"antwoorden" : ["antwoord 1", "antwoord 2", "antwoord 3", "antwoord 4"],
+				"correctAntwoord" : 0
+			}			
+		])
+

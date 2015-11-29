@@ -1,0 +1,18 @@
+_jqjsp([
+			{
+			location : 'A1 richting Apeldoorn',
+			description : 'Rij bij Deventer zuid de snelweg A1 op richting Apeldoorn'
+			},
+			{
+			location : 'raket naar de maan',
+			description : 'Pak in Apeldoorn de raket naar de maan'
+			},
+			{
+			location : 'Retourtje Denemarken',
+			description : 'Stap op de boot naar Denemarken'
+			},
+			{
+			location : 'Doel bereikt',
+			description : 'Rij de camping op'
+			}
+])
