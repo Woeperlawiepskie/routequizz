@@ -6,12 +6,12 @@ var app = {
 
     bindEvents: function() {
 		var self = this;
-		document.addEventListener('deviceready', function() {
-			self.onDeviceReady();
-		}
-		, false);
+//		document.addEventListener('deviceready', function() {
+//			self.onDeviceReady();
+//		}
+//		, false);
 		
-//		self.onDeviceReady();
+		self.onDeviceReady();
 	},
 
     onDeviceReady: function() {
@@ -187,9 +187,8 @@ var app = {
 	},
 	
 	answerQuestion : function(questionId, answerId) {
-		var correctAnswer = this.questions[questionId].correctAntwoord;
 		
-		if(answerId == correctAnswer) {
+		if(this.isGoodAnswer(questionId, answerId)) {
 			this.answers[questionId].answered = true;
 			this.updateQuestion(questionId);
 
@@ -203,11 +202,23 @@ var app = {
 		} else {
 			alert("oops");
 			var failSnd = new Media( '/android_asset/www/failure.wav' );
-		alert(failSnd);
+			alert(failSnd);
 			failSnd.play();
 
 			alert("played");
 		}
+	},
+	
+	isGoodAnswer : function(questionId, answerId) {
+		var goodAnswers = this.questions[questionId].correctAntwoord;
+
+		for(var i = 0; i < goodAnswers.length; i++) {
+			if(goodAnswers[i] == answerId) {
+				return true;
+			}
+		}
+	
+		return false;
 	},
 	
 	finish : function() {
