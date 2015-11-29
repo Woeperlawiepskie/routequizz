@@ -6,12 +6,12 @@ var app = {
 
     bindEvents: function() {
 		var self = this;
-//		document.addEventListener('deviceready', function() {
-//			self.onDeviceReady();
-//		}
-//		, false);
+		document.addEventListener('deviceready', function() {
+			self.onDeviceReady();
+		}
+		, false);
 		
-		self.onDeviceReady();
+//		self.onDeviceReady();
 	},
 
     onDeviceReady: function() {
@@ -189,6 +189,10 @@ var app = {
 	answerQuestion : function(questionId, answerId) {
 		
 		if(this.isGoodAnswer(questionId, answerId)) {
+			alert("oops");
+			
+			this.updateGpsPosition();
+			
 			this.answers[questionId].answered = true;
 			this.updateQuestion(questionId);
 
@@ -224,6 +228,44 @@ var app = {
 	finish : function() {
 	},
 
+	updateGpsPosition : function() {
+		var self = this;
+	
+		//alert(navigator.geolocation);
+	
+		navigator.geolocation.getCurrentPosition(function(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+		}, 
+		function (error) {
+			alert(error);
+		}, {});
+		
+		alert('klaar');
+	},
+	
+onGpsSuccess : function(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+},
+
+onGpsError : function(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+},
+	
 	
 //,
     // Update DOM on a Received Event

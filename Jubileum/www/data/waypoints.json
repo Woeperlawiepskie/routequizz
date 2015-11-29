@@ -1,18 +1,33 @@
 _jqjsp([
 			{
-			location : 'A1 richting Apeldoorn',
+			location : 'Apeldoorn',
 			description : 'Rij bij Deventer zuid de snelweg A1 op richting Apeldoorn'
 			},
 			{
-			location : 'raket naar de maan',
-			description : 'Pak in Apeldoorn de raket naar de maan'
+			location : 'Arnhem',
+			description : 'Knooppunt beekbergen A50 richting Arnhem'
 			},
 			{
-			location : 'Retourtje Denemarken',
-			description : 'Stap op de boot naar Denemarken'
+			location : 'Nijmegen',
+			description : 'A50 aanhouden richting Nijmegen'
 			},
 			{
-			location : 'Doel bereikt',
-			description : 'Rij de camping op'
+			location : 'Venlo',
+			description : 'Knooppunt Ewijk A73'
+			},
+			{
+			location : 'Maastricht',
+			description : 'afslag Maastricht / Roermond A73'
+			},
+			{
+			location : 'A2 Maastricht',
+			description : 'Afslag A73 naar A2'
+			},
+			{
+			location : 'Rijksweg N590',
+			description : 'Slag af op de Terblijterweg (=N590); Weg uitrijden'
 			}
+
 ])
+
+
