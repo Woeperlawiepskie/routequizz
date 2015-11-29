@@ -1,27 +1,52 @@
-_jqjsp([
-			{
-				"img" : "quiz001.png",
-				"vraag" : "Hoe lang zijn jullie getrouwd?",
-				"antwoorden" : ["10 jaar", "39 jaar", "40 jaar", "we zijn niet getrouwd"],
-				"correctAntwoord" : [2]	
-			},
-			{
-				"img" : "quiz002.png",
-				"vraag" : "vraag 2",
-				"antwoorden" : ["antwoord 1", "antwoord 2", "antwoord 3", "antwoord 4"],
-				"correctAntwoord" : [0]
-			},
-			{
-				"img" : "quiz003.png",
-				"vraag" : "vraag 3",
-				"antwoorden" : ["antwoord 1", "antwoord 2", "antwoord 3", "antwoord 4"],
-				"correctAntwoord" : [0]
-			},
-			{
-				"img" : "quizTarget.png",
-				"vraag" : "Laatste vraag",
-				"antwoorden" : ["antwoord 1", "antwoord 2", "antwoord 3", "antwoord 4"],
-				"correctAntwoord" : [0]
-			}			
-		])
-
+_jqjsp([{
+			"img" : "quiz001.png",
+			"vraag" : "Hoe lang zijn Marten en Nicole samen (ongeveer)?",
+			"antwoorden" : ["18 maanden", "1,5 jaar", "77 weken", "548 dagen"],
+			"correctAntwoord" : [0, 1, 2, 3]
+		}, {
+			"img" : "quiz002.png",
+			"vraag" : "Wat is de geboortedatum van Nick",
+			"antwoorden" : ["03-12-1979", "17-11-1979", "17-07-1979", "22-05-1979"],
+			"correctAntwoord" : [2]
+		}, {
+			"img" : "quiz003.png",
+			"vraag" : "Hoeveel broers en zussen hebben jullie samen (zwagers of schoonzussen niet meegerekend exclusief jullie zelf)",
+			"antwoorden" : ["3", "5", "9"],
+			"correctAntwoord" : [1]
+		}, {
+			"img" : "quiz004.png",
+			"vraag" : "Hoe heet het bedrijf waar Marc werkt",
+			"antwoorden" : ["Carinova", "Everest", "Reynolds and Reynolds", "Topicus"],
+			"correctAntwoord" : [1]
+		}, {
+			"img" : "quiz005.png",
+			"vraag" : "Wat is jullie postcode?",
+			"antwoorden" : ["7421LJ", "3812GZ", "7413DJ", " 7204JJ"],
+			"correctAntwoord" : [0]
+		}, {
+			"img" : "quiz006.png",
+			"vraag" : "Wat is het merk van Martien zijn mobiel?",
+			"antwoorden" : ["Johann Sebastian", "Ludwig", "Wolfgang", "Antonio"],
+			"correctAntwoord" : [2]
+		}, {
+			"img" : "quiz007.png",
+			"vraag" : "Wat is het merk en typenummer van jullie auto?",
+			"antwoorden" : ["Peugot 308SW", "Hyundai I10", "Hyundai IX35", "Porche carrera"],
+			"correctAntwoord" : [2]
+		}, {
+			"img" : "quiz008.png",
+			"vraag" : "Waar houden jullie beiden van?",
+			"antwoorden" : ["Mens-erger-je-niet spelen", "Reizen", "Motorrijden", "Ballonvaren", "Bungeejumpen"],
+			"correctAntwoord" : [1]
+		}, {
+			"img" : "quiz009.png",
+			"vraag" : "Wat doen Nicole en Marian graag samen?",
+			"antwoorden" : ["Zuipen", "Slapen", "Hardlopen", "Shoppen"],
+			"correctAntwoord" : [0, 3]
+		}, {
+			"img" : "quiz010.png",
+			"vraag" : "Van wie is deze mond/neus?",
+			"antwoorden" : ["Nick", "Marc", "Martien", "Marian"],
+			"correctAntwoord" : [3]
+		}
+	])
