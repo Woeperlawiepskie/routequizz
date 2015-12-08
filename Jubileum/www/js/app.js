@@ -19,15 +19,6 @@ var app = {
 	
 		//alert(navigator.geolocation);	
 		navigator.geolocation.watchPosition(function(position) {
-			
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
 		  updateQuestions(position);
 		}, 
 		function (error) {
@@ -41,7 +32,6 @@ var app = {
 		var self = this;
 
 		self.questionTemplate = Handlebars.compile(source);	
-		//TODO use promises -- moewahaha  
 		self.loadQuestions(
 			function() {
 				self.loadAnswers(
@@ -56,8 +46,6 @@ var app = {
 				);
 			}
 		);
-
-		//app.receivedEvent('deviceready');
     },
 	
 	loadQuestions : function(callback) {
@@ -91,7 +79,7 @@ var app = {
 		for(var i=0; i<this.questions.length; i++){
 			var answer = {
 			  answered: false,
-			  nearWaypoint : true
+			  nearWaypoint : false
 		    };
 			
 			answers.push(answer);
@@ -117,7 +105,7 @@ var app = {
 				}
 			},
 			error: function(options, status){
-				console.log('can not load waypoints: ' + status);
+				alert('can not load waypoints: ' + status);
 			}
 		});
 	},
@@ -158,9 +146,7 @@ var app = {
 	},
 	
 	renderQuestion : function(question, waypoint, state, node, replace) {
-			var scope = this.createScope(question, waypoint, state);
-			
-			
+			var scope = this.createScope(question, waypoint, state);			
 			
 			var html = this.questionTemplate(scope);
 			if(replace) {
@@ -174,13 +160,6 @@ var app = {
 			var scope = {
 				question : question,
 				waypoint : waypoint,
-//				state : {
-//					blocked : state < 1,
-//					unlocked : state < 2,
-//					answered : state == 2
-//				}
-
-//tijdelijke hack
 				state : {
 					blocked : state == 0,
 					unlocked : state == 1,
@@ -210,9 +189,7 @@ var app = {
 	
 	answerQuestion : function(questionId, answerId) {
 		
-		if(this.isGoodAnswer(questionId, answerId)) {
-			alert("oops");
-			
+		if(this.isGoodAnswer(questionId, answerId)) {			
 			this.updateGpsPosition();
 			
 			this.answers[questionId].answered = true;
@@ -226,12 +203,11 @@ var app = {
 			}
 
 		} else {
-			alert("oops");
-			var failSnd = new Media( '/android_asset/www/failure.wav' );
-			alert(failSnd);
-			failSnd.play();
+//			var failSnd = new Media( '/android_asset/www/failure.wav' );
+//			alert(failSnd);
+//			failSnd.play();
 
-			alert("played");
+			alert("vraag fout beantwoord");
 		}
 	},
 	
