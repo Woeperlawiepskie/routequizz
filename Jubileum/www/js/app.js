@@ -79,7 +79,7 @@ var app = {
 		for(var i=0; i<this.questions.length; i++){
 			var answer = {
 			  answered: false,
-			  nearWaypoint : false
+			  nearWaypoint : i==0
 		    };
 			
 			answers.push(answer);
