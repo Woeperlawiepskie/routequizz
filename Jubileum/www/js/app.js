@@ -17,9 +17,9 @@ var app = {
 	createGpsListener: function() {
 		var self = this;
 	
-		//alert(navigator.geolocation);
-	
+		//alert(navigator.geolocation);	
 		navigator.geolocation.watchPosition(function(position) {
+			
     alert('Latitude: '          + position.coords.latitude          + '\n' +
           'Longitude: '         + position.coords.longitude         + '\n' +
           'Altitude: '          + position.coords.altitude          + '\n' +
@@ -28,6 +28,7 @@ var app = {
           'Heading: '           + position.coords.heading           + '\n' +
           'Speed: '             + position.coords.speed             + '\n' +
           'Timestamp: '         + position.timestamp                + '\n');
+		  updateQuestions(position);
 		}, 
 		function (error) {
 			alert(error);
@@ -286,7 +287,29 @@ onGpsError : function(error) {
     alert('code: '    + error.code    + '\n' +
           'message: ' + error.message + '\n');
 },
-	
+updateQuestions : function(actual){	
+	for(var i=0; i<this.waypoints.length; i++){
+	   var position = this.waypoints[i].position;
+
+	   if(withinBounds(position, actual)) {
+			this.answers[i].nearWaypoint = true;
+			this.updateQuestion(i);
+			
+			alert("position reached: " + position);
+			break;
+	   }
+	}
+},
+withinBounds : function(expected, actual) {
+  var radius = 0.1454395;
+
+  var lattOk = actual.latitude <= (expected.latitude + radius) && actual.latitude >= (expected.latitude - radius);
+  var longOk = actual.longitude <= (expected.longitude + radius) && actual.longitude >= (expected.longitude - radius);
+
+  return lattOk && longOk;
+}
+
+
 	
 //,
     // Update DOM on a Received Event
