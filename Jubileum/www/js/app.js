@@ -122,7 +122,7 @@ var app = {
 		} 
 	},
 	
-	//state 0 = not unlocked; 1 = unlocked ; 2 = answered 
+	//state 0 = not unlocked; 1 = waiting, 2 = unlocked ; 3 = answered 
 	calculateState : function(questionId) {
 		var previousAnswer = {answered: true, nearWaypoint: true};
 		var answer = this.answers[questionId];
@@ -134,14 +134,19 @@ var app = {
 		
 		if(answer.answered) {
 			//state = answered
-			return 2;
+			return 3;
 		}
 		
 		if (previousAnswer.answered && answer.nearWaypoint) {
 			//state = unlocked
-			return 1;
+			return 2;
 		}
 		
+		if (previousAnswer.answered) {
+			//state = waiting
+			return 1;
+		}
+
 		return 0;
 	},
 	
@@ -162,8 +167,9 @@ var app = {
 				waypoint : waypoint,
 				state : {
 					blocked : state == 0,
-					unlocked : state == 1,
-					answered : state == 2
+					waiting : state == 1,
+					unlocked : state == 2,
+					answered : state == 3
 				}
 			};
 
