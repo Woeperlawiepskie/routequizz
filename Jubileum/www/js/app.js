@@ -31,7 +31,7 @@ var app = {
 		}, 
 		function (error) {
 			alert(error);
-		}, { frequency: 30000});
+		}, { timeout: 30000, enableHighAccuracy: true});
 	},
 	
     onDeviceReady: function() {

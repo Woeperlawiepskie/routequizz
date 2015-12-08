@@ -1,33 +1,43 @@
-_jqjsp([
-			{
+_jqjsp([{
+			position: { latitude : null,  longitude : null},
 			location : 'Apeldoorn',
-			description : 'Rij bij Deventer zuid de snelweg A1 op richting Apeldoorn'
-			},
-			{
+			description : 'Rij bij Deventer zuid de snelweg A1 op richting Apeldoorn.'
+		}, {
+			position: { latitude : 52.1912083, longitude : 6.0281363},
 			location : 'Arnhem',
-			description : 'Knooppunt beekbergen A50 richting Arnhem'
-			},
-			{
+			description : 'Knooppunt beekbergen A50 richting Arnhem. Volg de A50 tot knooppunt waterberg'
+		}, {
+			position: { latitude : 52.0177573, longitude : 5.9194463},
 			location : 'Nijmegen',
-			description : 'A50 aanhouden richting Nijmegen'
-			},
-			{
+			description : 'A12 aanhouden richting Nijmegen tot knooppunt Grijsoord'
+		}, {
+			position: { latitude : 52.0268633, longitude : 5.8278013},
+			location : 'Nijmegen',
+			description : 'Knooppunt Grijsoord A50: richting Nijmegen nemen tot knooppunt Ewijk'
+		}, {
+			position: { latitude : 51.8651183, longitude : 5.7177113},
+			location : 'Knooppunt Ewijk',
+			description : 'Neem op knooppunt Ewijk de A73 richting Venlo'
+		}, {
+			position: { latitude : 51.8443653, longitude : 5.7695393},
 			location : 'Venlo',
-			description : 'Knooppunt Ewijk A73'
-			},
-			{
+			description : 'Knooppunt Neerbosch: Blijf de A73 richting Venlo volgen'
+		}, {
+			position: { latitude : 51.4024853, longitude : 6.1243063},
 			location : 'Maastricht',
-			description : 'afslag Maastricht / Roermond A73'
-			},
-			{
-			location : 'A2 Maastricht',
-			description : 'Afslag A73 naar A2'
-			},
-			{
+			location: 'Knooppunt Zaderheiken: blijf A73 volgen richting Roermond/ Maastricht'
+		}, {
+			position: { latitude : 51.3493962, longitude : 6.1538759 },
+			location : 'Maastricht',
+			location: 'Knooppunt Tiglia: blijf A73 volgen richting Roermond/ Maastricht, later gaat de A73 over in de A2'
+		}, {
+			position: { latitude : 51.1314363, longitude : 5.9032363 },
+			location : 'Maastricht',
+			location: 'Blijf A2 volgen tot Maastricht'
+		}, {
+			position: { latitude : 50.8591128, longitude : 5.7113935 },
 			location : 'Rijksweg N590',
-			description : 'Slag af op de Terblijterweg (=N590); Weg uitrijden'
-			}
+			description : 'Slag af op de Terblijterweg (=N590). Blijf de N590 Terblijterweg volgen tot jullie bij het vakantiepark van Landal aankomen. Het adres is: Cauberg 29, Valkenburg.'
+		}
 
-])
-
-
+	])
