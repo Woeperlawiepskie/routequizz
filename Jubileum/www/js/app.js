@@ -14,6 +14,26 @@ var app = {
 //		self.onDeviceReady();
 	},
 
+	createGpsListener: function() {
+		var self = this;
+	
+		//alert(navigator.geolocation);
+	
+		navigator.geolocation.watchPosition(function(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+		}, 
+		function (error) {
+			alert(error);
+		}, { frequency: 30000});
+	},
+	
     onDeviceReady: function() {
 		var source   = $("#quizquestion-template").html();
 
@@ -28,6 +48,7 @@ var app = {
 						self.loadWayPoints(
 							function() {
 								self.renderQuestions();
+								self.createGpsListener();
 							}
 						);
 					}
