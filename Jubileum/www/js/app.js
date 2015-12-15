@@ -19,7 +19,16 @@ var app = {
 	
 		//alert(navigator.geolocation);	
 		navigator.geolocation.watchPosition(function(position) {
-		  updateQuestions(position);
+			/*alert(' Postion wathed!' + '\n' +
+			  'Latitude: '          + position.coords.latitude          + '\n' +
+			  'Longitude: '         + position.coords.longitude         + '\n' +
+			  'Altitude: '          + position.coords.altitude          + '\n' +
+			  'Accuracy: '          + position.coords.accuracy          + '\n' +
+			  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+			  'Heading: '           + position.coords.heading           + '\n' +
+			  'Speed: '             + position.coords.speed             + '\n' +
+			  'Timestamp: '         + position.timestamp                + '\n');*/
+		  self.updateQuestions(position.coords);
 		}, 
 		function (error) {
 			alert(error);
@@ -183,7 +192,7 @@ var app = {
 
 			var node = $('#q' + updatedQuestionId);
 			var state = this.calculateState(updatedQuestionId);
-
+			
 			this.renderQuestion(question, waypoint, state, node, true);
 	},
 	
@@ -194,7 +203,6 @@ var app = {
 	},
 	
 	answerQuestion : function(questionId, answerId) {
-		
 		if(this.isGoodAnswer(questionId, answerId)) {			
 			this.updateGpsPosition();
 			
@@ -213,7 +221,7 @@ var app = {
 //			alert(failSnd);
 //			failSnd.play();
 
-			alert("vraag fout beantwoord");
+			alert("Vraag fout beantwoord");
 		}
 	},
 	
@@ -238,20 +246,20 @@ var app = {
 		//alert(navigator.geolocation);
 	
 		navigator.geolocation.getCurrentPosition(function(position) {
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
+			/*alert('Latitude: '          + position.coords.latitude          + '\n' +
+			  'Longitude: '         + position.coords.longitude         + '\n' +
+			  'Altitude: '          + position.coords.altitude          + '\n' +
+			  'Accuracy: '          + position.coords.accuracy          + '\n' +
+			  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+			  'Heading: '           + position.coords.heading           + '\n' +
+			  'Speed: '             + position.coords.speed             + '\n' +
+			  'Timestamp: '         + position.timestamp                + '\n');*/
+			  this.updateQuestions(position);
 		}, 
 		function (error) {
 			alert(error);
 		}, {});
 		
-		alert('klaar');
 	},
 	
 onGpsSuccess : function(position) {
@@ -263,6 +271,8 @@ onGpsSuccess : function(position) {
           'Heading: '           + position.coords.heading           + '\n' +
           'Speed: '             + position.coords.speed             + '\n' +
           'Timestamp: '         + position.timestamp                + '\n');
+	this.updateQuestions(position);	  
+		  
 },
 
 onGpsError : function(error) {
@@ -272,23 +282,30 @@ onGpsError : function(error) {
 updateQuestions : function(actual){	
 	for(var i=0; i<this.waypoints.length; i++){
 	   var position = this.waypoints[i].position;
-
-	   if(withinBounds(position, actual)) {
+	   	   
+	   // hack -> eerste vraag heeft geen positie
+	   if(i!=0 && this.withinBounds(position, actual)) {
 			this.answers[i].nearWaypoint = true;
 			this.updateQuestion(i);
 			
-			alert("position reached: " + position);
+			//alert("position reached for waypoint: "+i);
 			break;
 	   }
 	}
 },
 withinBounds : function(expected, actual) {
-  var radius = 0.1454395;
+	var radius = 0.1454395;
 
-  var lattOk = actual.latitude <= (expected.latitude + radius) && actual.latitude >= (expected.latitude - radius);
-  var longOk = actual.longitude <= (expected.longitude + radius) && actual.longitude >= (expected.longitude - radius);
+	var expectedLat = parseFloat(expected.latitude);
+	var expectedLong = parseFloat(expected.longitude);
 
-  return lattOk && longOk;
+	var actualLat = parseFloat(actual.latitude);
+	var actualLong = parseFloat(actual.longitude);
+
+	var lattOk = actualLat <= (expectedLat + radius) && actualLat >= (expectedLat - radius);
+	var longOk = actualLong <= (expectedLong + radius) && actualLong >= (expectedLong - radius);
+	
+	return lattOk && longOk;
 }
 
 
