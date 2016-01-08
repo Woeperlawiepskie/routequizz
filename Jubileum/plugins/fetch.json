@@ -9,9 +9,8 @@
     },
     "cordova-plugin-media": {
         "source": {
-            "type": "git",
-            "url": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-media.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "cordova-plugin-media"
         },
         "is_top_level": true,
         "variables": {}
@@ -30,5 +29,13 @@
             "type": "registry",
             "id": "org.apache.cordova.geolocation"
         }
+    },
+    "cordova-plugin-file": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-file"
+        },
+        "is_top_level": false,
+        "variables": {}
     }
 }

@@ -218,12 +218,10 @@ var app = {
 			}else{
 				this.updateQuestion(nextQuestionId);
 			}
-
 		} else {
-//			var failSnd = new Media( '/android_asset/www/failure.wav' );
-//			alert(failSnd);
-//			failSnd.play();
-			alert("Vraag fout beantwoord");			
+			this.playSound('errorSound');
+			alert("Vraag fout beantwoord, probeer het nog eens");		
+			
 			var jsonData = {
 				message: "Vraag fout beantwoord", 
 				question: this.questions[questionId].vraag, 
@@ -329,9 +327,26 @@ sendRestRequest : function(data){
 			alert(e);			
 		}			
 	}
+},
+playSound : function(id){
+	try{
+		var audioElement = document.getElementById(id);
+		var url = audioElement.getAttribute('src');
+
+		var my_media = new Media(url,
+				// success callback
+				 function () { /*alert("playAudio():Audio Success"); */},
+				// error callback
+				 function (err) { /* alert("playAudio():Audio Error: " + err);*/ }
+		);
+			   // Play audio
+		my_media.play();
+	} catch(e){
+		if(this.debug){
+			alert(e);
+		}
+	}
 }
-
-
 	
 //,
     // Update DOM on a Received Event

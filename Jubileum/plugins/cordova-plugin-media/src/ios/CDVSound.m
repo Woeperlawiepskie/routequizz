@@ -251,29 +251,6 @@
     // don't care for any callbacks
 }
 
-- (void)setRate:(CDVInvokedUrlCommand*)command
-{
-    NSString* callbackId = command.callbackId;
-
-#pragma unused(callbackId)
-    NSString* mediaId = [command argumentAtIndex:0];
-    NSNumber* rate = [command argumentAtIndex:1 withDefault:[NSNumber numberWithFloat:1.0]];
-
-    if ([self soundCache] != nil) {
-        CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
-        if (audioFile != nil) {
-            audioFile.rate = rate;
-            if (audioFile.player) {
-                audioFile.player.enableRate = YES;
-                audioFile.player.rate = [rate floatValue];
-            }
-            [[self soundCache] setObject:audioFile forKey:mediaId];
-        }
-    }
-
-    // don't care for any callbacks
-}
-
 - (void)startPlayingAudio:(CDVInvokedUrlCommand*)command
 {
     NSString* callbackId = command.callbackId;
@@ -324,11 +301,6 @@
                 }
                 if (audioFile.volume != nil) {
                     audioFile.player.volume = [audioFile.volume floatValue];
-                }
-
-                audioFile.player.enableRate = YES;
-                if (audioFile.rate != nil) {
-                    audioFile.player.rate = [audioFile.rate floatValue];
                 }
 
                 [audioFile.player play];
@@ -715,7 +687,7 @@
 
 @synthesize resourcePath;
 @synthesize resourceURL;
-@synthesize player, volume, rate;
+@synthesize player, volume;
 @synthesize recorder;
 
 @end

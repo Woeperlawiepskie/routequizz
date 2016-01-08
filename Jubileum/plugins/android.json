@@ -27,7 +27,14 @@
         },
         "org.apache.cordova.geolocation": {
             "PACKAGE_NAME": "org.hesselink"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "org.hesselink"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "org.hesselink"
+        }
+    }
 }

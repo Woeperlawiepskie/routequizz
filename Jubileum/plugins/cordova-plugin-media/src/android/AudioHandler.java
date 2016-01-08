@@ -22,15 +22,11 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaResourceApi;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
 
-import java.security.Permission;
 import java.util.ArrayList;
 
 import org.apache.cordova.PluginResult;
@@ -59,16 +55,6 @@ public class AudioHandler extends CordovaPlugin {
     private int origVolumeStream = -1;
     private CallbackContext messageChannel;
 
-
-    public static String [] permissions = { Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    public static int RECORD_AUDIO = 0;
-    public static int WRITE_EXTERNAL_STORAGE = 1;
-
-    public static final int PERMISSION_DENIED_ERROR = 20;
-
-    private String recordId;
-    private String fileUriStr;
-
     /**
      * Constructor.
      */
@@ -76,19 +62,6 @@ public class AudioHandler extends CordovaPlugin {
         this.players = new HashMap<String, AudioPlayer>();
         this.pausedForPhone = new ArrayList<AudioPlayer>();
     }
-
-
-    protected void getWritePermission(int requestCode)
-    {
-        cordova.requestPermission(this, requestCode, permissions[WRITE_EXTERNAL_STORAGE]);
-    }
-
-
-    protected void getMicPermission(int requestCode)
-    {
-        cordova.requestPermission(this, requestCode, permissions[RECORD_AUDIO]);
-    }
-
 
     /**
      * Executes the request and returns PluginResult.
@@ -100,19 +73,18 @@ public class AudioHandler extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         CordovaResourceApi resourceApi = webView.getResourceApi();
         PluginResult.Status status = PluginResult.Status.OK;
-        messageChannel = callbackContext;
         String result = "";
 
         if (action.equals("startRecordingAudio")) {
-            recordId = args.getString(0);
             String target = args.getString(1);
+            String fileUriStr;
             try {
                 Uri targetUri = resourceApi.remapUri(Uri.parse(target));
                 fileUriStr = targetUri.toString();
             } catch (IllegalArgumentException e) {
                 fileUriStr = target;
             }
-            promptForRecord();
+            this.startRecordingAudio(args.getString(0), FileHelper.stripFileProtocol(fileUriStr));
         }
         else if (action.equals("stopRecordingAudio")) {
             this.stopRecordingAudio(args.getString(0));
@@ -435,42 +407,4 @@ public class AudioHandler extends CordovaPlugin {
             messageChannel.sendPluginResult(pluginResult);
         }
     }
-
-    public void onRequestPermissionResult(int requestCode, String[] permissions,
-                                          int[] grantResults) throws JSONException
-    {
-        for(int r:grantResults)
-        {
-            if(r == PackageManager.PERMISSION_DENIED)
-            {
-                this.messageChannel.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, PERMISSION_DENIED_ERROR));
-                return;
-            }
-        }
-        promptForRecord();
-    }
-
-    /*
-     * This little utility method catch-all work great for multi-permission stuff.
-     *
-     */
-
-    private void promptForRecord()
-    {
-        if(cordova.hasPermission(permissions[WRITE_EXTERNAL_STORAGE])  &&
-                cordova.hasPermission(permissions[RECORD_AUDIO])) {
-            this.startRecordingAudio(recordId, FileHelper.stripFileProtocol(fileUriStr));
-        }
-        else if(cordova.hasPermission(permissions[RECORD_AUDIO]))
-        {
-            getWritePermission(WRITE_EXTERNAL_STORAGE);
-        }
-        else
-        {
-            getMicPermission(RECORD_AUDIO);
-        }
-
-    }
-
-
 }
