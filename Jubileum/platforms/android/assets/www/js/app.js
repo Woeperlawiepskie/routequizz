@@ -1,5 +1,7 @@
 var app = {
-	
+	debug: true,
+	radius: 0.1454395,
+	restUrl: "http://185.107.212.156:8080/servicehost/message",	
     initialize: function() {
 		this.bindEvents();
     },
@@ -8,19 +10,40 @@ var app = {
 		var self = this;
 		document.addEventListener('deviceready', function() {
 			self.onDeviceReady();
+			self.sendRestRequest({message : "De quizz is gestart!"});
 		}
 		, false);
 		
 //		self.onDeviceReady();
 	},
 
+	createGpsListener: function() {
+		var self = this;
+	
+		//alert(navigator.geolocation);	
+		navigator.geolocation.watchPosition(function(position) {
+			/*alert(' Postion wathed!' + '\n' +
+			  'Latitude: '          + position.coords.latitude          + '\n' +
+			  'Longitude: '         + position.coords.longitude         + '\n' +
+			  'Altitude: '          + position.coords.altitude          + '\n' +
+			  'Accuracy: '          + position.coords.accuracy          + '\n' +
+			  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+			  'Heading: '           + position.coords.heading           + '\n' +
+			  'Speed: '             + position.coords.speed             + '\n' +
+			  'Timestamp: '         + position.timestamp                + '\n');*/
+		  self.updateQuestions(position.coords);
+		}, 
+		function (error) {
+			alert(error);
+		}, { timeout: 30000, enableHighAccuracy: true});
+	},
+	
     onDeviceReady: function() {
 		var source   = $("#quizquestion-template").html();
 
 		var self = this;
 
 		self.questionTemplate = Handlebars.compile(source);	
-		//TODO use promises -- moewahaha  
 		self.loadQuestions(
 			function() {
 				self.loadAnswers(
@@ -28,14 +51,13 @@ var app = {
 						self.loadWayPoints(
 							function() {
 								self.renderQuestions();
+								self.createGpsListener();
 							}
 						);
 					}
 				);
 			}
 		);
-
-		//app.receivedEvent('deviceready');
     },
 	
 	loadQuestions : function(callback) {
@@ -57,7 +79,7 @@ var app = {
 				}
 			},
 			error: function(options, status){
-				console.log('can not load questions: ' + status);
+				alert('can not load questions: ' + status);
 			}
 		});
 	},
@@ -69,7 +91,7 @@ var app = {
 		for(var i=0; i<this.questions.length; i++){
 			var answer = {
 			  answered: false,
-			  nearWaypoint : true
+			  nearWaypoint : i==0
 		    };
 			
 			answers.push(answer);
@@ -95,7 +117,7 @@ var app = {
 				}
 			},
 			error: function(options, status){
-				console.log('can not load waypoints: ' + status);
+				alert('can not load waypoints: ' + status);
 			}
 		});
 	},
@@ -112,7 +134,7 @@ var app = {
 		} 
 	},
 	
-	//state 0 = not unlocked; 1 = unlocked ; 2 = answered 
+	//state 0 = not unlocked; 1 = waiting, 2 = unlocked ; 3 = answered 
 	calculateState : function(questionId) {
 		var previousAnswer = {answered: true, nearWaypoint: true};
 		var answer = this.answers[questionId];
@@ -124,21 +146,24 @@ var app = {
 		
 		if(answer.answered) {
 			//state = answered
-			return 2;
+			return 3;
 		}
 		
 		if (previousAnswer.answered && answer.nearWaypoint) {
 			//state = unlocked
-			return 1;
+			return 2;
 		}
 		
+		if (previousAnswer.answered) {
+			//state = waiting
+			return 1;
+		}
+
 		return 0;
 	},
 	
 	renderQuestion : function(question, waypoint, state, node, replace) {
-			var scope = this.createScope(question, waypoint, state);
-			
-			
+			var scope = this.createScope(question, waypoint, state);			
 			
 			var html = this.questionTemplate(scope);
 			if(replace) {
@@ -152,17 +177,11 @@ var app = {
 			var scope = {
 				question : question,
 				waypoint : waypoint,
-//				state : {
-//					blocked : state < 1,
-//					unlocked : state < 2,
-//					answered : state == 2
-//				}
-
-//tijdelijke hack
 				state : {
 					blocked : state == 0,
-					unlocked : state == 1,
-					answered : state == 2
+					waiting : state == 1,
+					unlocked : state == 2,
+					answered : state == 3
 				}
 			};
 
@@ -176,7 +195,7 @@ var app = {
 
 			var node = $('#q' + updatedQuestionId);
 			var state = this.calculateState(updatedQuestionId);
-
+			
 			this.renderQuestion(question, waypoint, state, node, true);
 	},
 	
@@ -187,10 +206,7 @@ var app = {
 	},
 	
 	answerQuestion : function(questionId, answerId) {
-		
-		if(this.isGoodAnswer(questionId, answerId)) {
-			alert("oops");
-			
+		if(this.isGoodAnswer(questionId, answerId)) {			
 			this.updateGpsPosition();
 			
 			this.answers[questionId].answered = true;
@@ -204,12 +220,16 @@ var app = {
 			}
 
 		} else {
-			alert("oops");
-			var failSnd = new Media( '/android_asset/www/failure.wav' );
-			alert(failSnd);
-			failSnd.play();
-
-			alert("played");
+//			var failSnd = new Media( '/android_asset/www/failure.wav' );
+//			alert(failSnd);
+//			failSnd.play();
+			alert("Vraag fout beantwoord");			
+			var jsonData = {
+				message: "Vraag fout beantwoord", 
+				question: this.questions[questionId].vraag, 
+				answer: answerId				
+			};
+			this.sendRestRequest(jsonData);
 		}
 	},
 	
@@ -234,20 +254,22 @@ var app = {
 		//alert(navigator.geolocation);
 	
 		navigator.geolocation.getCurrentPosition(function(position) {
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
+			/*alert('Latitude: '          + position.coords.latitude          + '\n' +
+			  'Longitude: '         + position.coords.longitude         + '\n' +
+			  'Altitude: '          + position.coords.altitude          + '\n' +
+			  'Accuracy: '          + position.coords.accuracy          + '\n' +
+			  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+			  'Heading: '           + position.coords.heading           + '\n' +
+			  'Speed: '             + position.coords.speed             + '\n' +
+			  'Timestamp: '         + position.timestamp                + '\n');*/
+			  this.updateQuestions(position);
 		}, 
 		function (error) {
-			alert(error);
+			if(this.debug) {
+				alert(error);
+			}
 		}, {});
 		
-		alert('klaar');
 	},
 	
 onGpsSuccess : function(position) {
@@ -259,13 +281,57 @@ onGpsSuccess : function(position) {
           'Heading: '           + position.coords.heading           + '\n' +
           'Speed: '             + position.coords.speed             + '\n' +
           'Timestamp: '         + position.timestamp                + '\n');
+	this.updateQuestions(position);	  
+		  
 },
 
 onGpsError : function(error) {
     alert('code: '    + error.code    + '\n' +
           'message: ' + error.message + '\n');
 },
+updateQuestions : function(actual){	
+	for(var i=0; i<this.waypoints.length; i++){
+	   var position = this.waypoints[i].position;
+	   	   
+	   // hack -> eerste vraag heeft geen positie
+	   if(i!=0 && this.withinBounds(position, actual)) {
+			this.answers[i].nearWaypoint = true;
+			this.updateQuestion(i);
+			
+			if(this.debug){
+				alert("position reached for waypoint: "+i);
+			}
+			break;
+	   }
+	}
+},
+withinBounds : function(expected, actual) {
+	var expectedLat = parseFloat(expected.latitude);
+	var expectedLong = parseFloat(expected.longitude);
+
+	var actualLat = parseFloat(actual.latitude);
+	var actualLong = parseFloat(actual.longitude);
+
+	var lattOk = actualLat <= (expectedLat + this.radius) && actualLat >= (expectedLat - this.radius);
+	var longOk = actualLong <= (expectedLong + this.radius) && actualLong >= (expectedLong - this.radius);
 	
+	return lattOk && longOk;
+},
+sendRestRequest : function(data){
+	try{
+		
+		$.post(this.restUrl, {"message": "dag marc, een berichtje uit de app"}, function(e){
+			alert(e);
+			
+		});
+	} catch(e){
+		if(this.debug){
+			alert(e);			
+		}			
+	}
+}
+
+
 	
 //,
     // Update DOM on a Received Event

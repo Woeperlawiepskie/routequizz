@@ -1,5 +1,7 @@
 var app = {
-	
+	debug: true,
+	radius: 0.1454395,
+	restUrl: "http://185.107.212.156:8080/servicehost/message",	
     initialize: function() {
 		this.bindEvents();
     },
@@ -8,6 +10,7 @@ var app = {
 		var self = this;
 		document.addEventListener('deviceready', function() {
 			self.onDeviceReady();
+			self.sendRestRequest({message : "De quizz is gestart!"});
 		}
 		, false);
 		
@@ -76,7 +79,7 @@ var app = {
 				}
 			},
 			error: function(options, status){
-				console.log('can not load questions: ' + status);
+				alert('can not load questions: ' + status);
 			}
 		});
 	},
@@ -220,8 +223,13 @@ var app = {
 //			var failSnd = new Media( '/android_asset/www/failure.wav' );
 //			alert(failSnd);
 //			failSnd.play();
-
-			alert("Vraag fout beantwoord");
+			alert("Vraag fout beantwoord");			
+			var jsonData = {
+				message: "Vraag fout beantwoord", 
+				question: this.questions[questionId].vraag, 
+				answer: answerId				
+			};
+			this.sendRestRequest(jsonData);
 		}
 	},
 	
@@ -257,7 +265,9 @@ var app = {
 			  this.updateQuestions(position);
 		}, 
 		function (error) {
-			alert(error);
+			if(this.debug) {
+				alert(error);
+			}
 		}, {});
 		
 	},
@@ -288,24 +298,37 @@ updateQuestions : function(actual){
 			this.answers[i].nearWaypoint = true;
 			this.updateQuestion(i);
 			
-			//alert("position reached for waypoint: "+i);
+			if(this.debug){
+				alert("position reached for waypoint: "+i);
+			}
 			break;
 	   }
 	}
 },
 withinBounds : function(expected, actual) {
-	var radius = 0.1454395;
-
 	var expectedLat = parseFloat(expected.latitude);
 	var expectedLong = parseFloat(expected.longitude);
 
 	var actualLat = parseFloat(actual.latitude);
 	var actualLong = parseFloat(actual.longitude);
 
-	var lattOk = actualLat <= (expectedLat + radius) && actualLat >= (expectedLat - radius);
-	var longOk = actualLong <= (expectedLong + radius) && actualLong >= (expectedLong - radius);
+	var lattOk = actualLat <= (expectedLat + this.radius) && actualLat >= (expectedLat - this.radius);
+	var longOk = actualLong <= (expectedLong + this.radius) && actualLong >= (expectedLong - this.radius);
 	
 	return lattOk && longOk;
+},
+sendRestRequest : function(data){
+	try{
+		
+		$.post(this.restUrl, {"message": "dag marc, een berichtje uit de app"}, function(e){
+			alert(e);
+			
+		});
+	} catch(e){
+		if(this.debug){
+			alert(e);			
+		}			
+	}
 }
 
 

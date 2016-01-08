@@ -35,6 +35,14 @@
 			Beantwoord eerst de vorige vragen.
 			</div>
   {{/if}}
+ {{#if state.waiting}}
+  <div class="timeline-heading">
+				<h4>Vraag {{question.displayId}}</h4>
+			</div>
+			<div class="timeline-body">
+			Wacht op vrijgave volgende waypoint.
+			</div>
+  {{/if}}
  {{#if state.unlocked}}
 			<div class="timeline-heading">
 				<h4>Vraag {{question.displayId}}</h4>
@@ -83,13 +91,10 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#services">50 / 50</a>
+                        <a class="page-scroll" href="tel: +31629527054">Bel Marc</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#portfolio">Publiek</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#about">Bel familie</a>
+					<li>
+                        <a class="page-scroll" href="tel: +31613115217">Bel Nicole</a>
                     </li>
                 </ul>
             </div>
