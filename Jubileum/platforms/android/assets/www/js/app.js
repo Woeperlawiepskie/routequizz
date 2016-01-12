@@ -1,7 +1,7 @@
 var app = {
 	debug: true,
 	radius: 0.1454395,
-	restUrl: "http://185.107.212.156:8080/servicehost/message",	
+	restUrl: "http://185.107.212.156:8080/services/message",	
     initialize: function() {
 		this.bindEvents();
     },

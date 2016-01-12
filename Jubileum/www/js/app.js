@@ -1,7 +1,7 @@
 var app = {
 	debug: true,
 	radius: 0.1454395,
-	restUrl: "http://185.107.212.156:8080/servicehost/message",	
+	restUrl: "http://185.107.212.156:8080/services/message",	
     initialize: function() {
 		this.bindEvents();
     },
@@ -297,7 +297,7 @@ updateQuestions : function(actual){
 			this.updateQuestion(i);
 			
 			if(this.debug){
-				alert("position reached for waypoint: "+i);
+				//alert("position reached for waypoint: "+i);
 			}
 			break;
 	   }
@@ -317,10 +317,9 @@ withinBounds : function(expected, actual) {
 },
 sendRestRequest : function(data){
 	try{
-		
+		alert('sending to '+this.restUrl);
 		$.post(this.restUrl, {"message": "dag marc, een berichtje uit de app"}, function(e){
-			alert(e);
-			
+			alert(e);			
 		});
 	} catch(e){
 		if(this.debug){
